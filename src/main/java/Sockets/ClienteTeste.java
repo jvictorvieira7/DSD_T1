@@ -42,7 +42,7 @@ public class ClienteTeste {
             ============================
             """);
 
-        try (Socket socket = new Socket("192.168.0.103", 80);
+        try (Socket socket = new Socket("127.0.0.1", 80);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             
