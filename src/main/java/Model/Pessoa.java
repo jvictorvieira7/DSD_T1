@@ -1,76 +1,95 @@
 package Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Pessoa {
 
-    private String cpf;
-    private String nome;
-    private String endereco;
+	private String cpf;
+	private String nome;
+	private String endereco;
+	private static List<Pessoa> pessoas = new ArrayList<>();
 
+	public Pessoa(String cpf, String nome, String endereco) {
+		this.cpf = cpf;
+		this.nome = nome;
+		this.endereco = endereco;
+	}
 
-    public Pessoa(String cpf, String nome, String endereco) {
-        this.cpf = cpf;
-        this.nome = nome;
-        this.endereco = endereco;
-    }
+	public String getCpf() {
+		return cpf;
+	}
 
-    public String getCpf() {
-        return cpf;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public String getEndereco() {
+		return endereco;
+	}
 
-    public String getEndereco() {
-        return endereco;
-    }
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
 
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
+	 public static String Insert(Pessoa p) {
+	        if (buscarPorCpf(p.getCpf()) != null) {
+	            return "Erro: Pessoa com este CPF já existe";
+	        }
+	        pessoas.add(p);
+	        return "Pessoa inserida com sucesso";
+	    }
 
+	    public static String Update(Pessoa p, int reg) {
+	        Pessoa pessoaExistente = buscarPorCpf(p.getCpf());
+	        if (pessoaExistente == null) {
+	            return "Erro: Pessoa não encontrada"; 
+	        }
 
-    public void Insert(Pessoa p) {
-        Pessoa novaPessoa = new Pessoa(p.getCpf(), p.getNome(), p.getEndereco());
-    }
+	        switch (reg) {
+	            case 1:
+	                pessoaExistente.setNome(p.getNome());
+	                break; 
+	            case 2:
+	                pessoaExistente.setEndereco(p.getEndereco());
+	                break;
+	            default:
+	                return "Erro: Opção inválida";
+	        }
+	        return "Pessoa atualizada com sucesso";
+	    }
 
-    public void Update(Pessoa p, int reg) {
-        if (p.getCpf().equals(cpf)) {
-            switch (reg) {
-                case 1:
-                    nome = p.getNome();
-                    break;
-                case 2:
-                    endereco = p.getEndereco();
-                    break;
-                default:
-                    //TODO mensagem
-            }
-        } else {
-            //TODO mensagem
-        }
-    }
+	    public static Pessoa Get(String cpf) {
+	        return buscarPorCpf(cpf);
+	    }
 
-    public void Get(String cpf) {
-        //TODO
-    }
+	    public static String Delete(String cpf) {
+	        Pessoa pessoa = buscarPorCpf(cpf);
+	        if (pessoa == null) {
+	            return "Erro: Pessoa não encontrada";
+	        }
+	        pessoas.remove(pessoa);
+	        return "Pessoa removida com sucesso";
+	    }
 
-    public void Delete(String cpf) {
-        //TODO
-    }
+	    public static List<Pessoa> List() {
+	        return new ArrayList<>(pessoas); 
+	    }
 
-    public void List(){
-        //TODO
-    }
-
-
-
-}
+	    private static Pessoa buscarPorCpf(String cpf) {
+	        for (Pessoa p : pessoas) {
+	            if (p.getCpf().equals(cpf)) {
+	                return p;
+	            }
+	        }
+	        return null;
+	    }
+	}

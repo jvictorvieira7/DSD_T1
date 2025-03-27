@@ -11,7 +11,7 @@ public class Cliente {
 
         System.out.println("Criando conexão...");
 
-        try (Socket socket = new Socket("10.15.120.94", 80);) {
+        try (Socket socket = new Socket("192.168.0.103", 80);) {
             System.out.println("Conectado com sucesso!");
             InputStream inputStream = socket.getInputStream();
             byte[] dadosBrutos = new byte[1024];
