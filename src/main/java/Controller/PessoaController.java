@@ -28,9 +28,8 @@ public class PessoaController {
         }
     }
 
-
-    public String updatePessoa(Pessoa p, int reg) {
-        UpdateCase tryUpdate = pessoaService.updateDB(p, reg);
+    public String updatePessoa(Pessoa p, int opt) {
+        UpdateCase tryUpdate = pessoaService.updateDB(p, opt);
 
         switch (tryUpdate) {
             case SUCESSO:
@@ -44,7 +43,14 @@ public class PessoaController {
         }
     }
 
-    public static Pessoa Get(String cpf) {
+
+
+    public String Get(String cpf) {
+     boolean tryGet = pessoaService.getDB(cpf);
+
+     if (tryGet) {
+         return Mensagens.BUSCA_EXECUTADA + pe
+     }
         return buscarPorCpf(cpf);
     }
 

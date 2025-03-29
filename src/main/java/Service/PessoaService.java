@@ -12,21 +12,21 @@ public class PessoaService {
 
     public boolean insertDB(Pessoa p) {
         if (buscarPorCpf(p.getCpf()) != null) {
-            return false; // CPF já cadastrado
+            return false; //CPF já cadastrado
         }
         pessoas.add(p);
-        return true; // Retorna true se a pessoa for adicionada com sucesso
+        return true; //Retorna true se a pessoa for adicionada com sucesso
     }
 
-    public UpdateCase updateDB(Pessoa p, int reg) {
-        // Verifica se a pessoa já existe pelo CPF
+    public UpdateCase updateDB(Pessoa p, int opt) {
+        //Verifica se a pessoa já existe pelo CPF
         Pessoa pessoaCadastrada = buscarPorCpf(p.getCpf());
         if (pessoaCadastrada == null) {
-            return UpdateCase.PESSOA_NAO_ENCONTRADA;  // Pessoa não encontrada
+            return UpdateCase.PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
         }
 
-        // Realiza a atualização com base na opção 'reg'
-        switch (reg) {
+        //Realiza a atualização com base na opção 'opt'
+        switch (opt) {
             case 1:
                 pessoaCadastrada.setNome(p.getNome());
                 break;
@@ -37,11 +37,16 @@ public class PessoaService {
                 return UpdateCase.OPCAO_INVALIDA;  // Opção inválida
         }
 
-        return UpdateCase.SUCESSO;  // Atualização bem-sucedida
+        return UpdateCase.SUCESSO;  //Atualização bem-sucedida
     }
 
-    public static Pessoa Get(String cpf) {
-        return buscarPorCpf(cpf);
+
+    public boolean getDB(String cpf) {
+        Pessoa pessoaCadastrada = buscarPorCpf(cpf);
+        if (pessoaCadastrada == null) {
+            return UpdateCase.PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
+        }
+        return true;
     }
 
     public static String Delete(String cpf) {
