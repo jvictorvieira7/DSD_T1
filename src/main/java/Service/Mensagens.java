@@ -18,5 +18,45 @@ public class Mensagens {
 
     public static final String LISTAR_PESSOAS = "Lisa de pessoas cadastradas: ";
 
-    public static final String LISTA_VAZIA = "Nenhuma pessoa cadastrada no sistema";
+    public static final String LISTA_VAZIA = "Nenhuma pessoa cadastrada no sistema.";
+
+    public static final String TIMEOUT = "Tempo limite excedido. Encerrando conexão.";
+
+    public static final String CONEXAO_CLIENTE_CLOSE = "Conexão com o servidor encerrada.";
+
+    public static final String SERVER_STARTED = "Servidor iniciado na porta: ";
+
+    public static final String SINTAXE = """
+            ===== SINTAXE DE COMANDOS =====
+            
+            PESSOAS:
+              INSERT;PESSOA;CPF;NOME;ENDERECO
+              GET;PESSOA;CPF
+              UPDATE;PESSOA;CPF;NOVO_NOME;NOVO_ENDERECO
+              UPDATE;ENDERECO;CPF;NOVO_ENDERECO
+              DELETE;PESSOA;CPF
+              LIST;PESSOA
+            
+            PROFESSORES:
+              INSERT;PROFESSOR;CPF;NOME;ENDERECO;ESPECIALIZACAO
+              GET;PROFESSOR;CPF
+              DELETE;PROFESSOR;CPF
+              LIST;PROFESSOR
+            
+            ALUNOS:
+              INSERT;ALUNO;CPF;NOME;ENDERECO;MATRICULA
+              GET;ALUNO;CPF
+              DELETE;ALUNO;CPF
+              LIST;ALUNO
+            
+            AULAS:
+              INSERT;AULA;DATA(dd/MM/yyyy HH:mm);VALOR;CPF_PROFESSOR;CPF_ALUNO;LOCAL
+              GET;AULA;DATA;CPF_PROFESSOR
+              DELETE;AULA;DATA;CPF_PROFESSOR
+              LIST;AULA
+            
+            Digite SAIR para encerrar
+            ============================
+            """;
+
 }

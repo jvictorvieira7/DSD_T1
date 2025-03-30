@@ -7,6 +7,9 @@ import java.util.List;
 
 public class PessoaService {
 
+    public PessoaService() {
+    }
+
     private static List<Pessoa> pessoaList = new ArrayList<>();
 
 

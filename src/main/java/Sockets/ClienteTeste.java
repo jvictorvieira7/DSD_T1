@@ -1,69 +1,62 @@
 package Sockets;
 
+import Service.Mensagens;
+
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class ClienteTeste {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("""
-            ===== SISTEMA DE GESTÃO =====
-            Formatos de comando:
-            
-            PESSOAS:
-              INSERT;PESSOA;CPF;NOME;ENDERECO
-              GET;PESSOA;CPF
-              UPDATE;PESSOA;CPF;NOVO_NOME;NOVO_ENDERECO
-              UPDATE;ENDERECO;CPF;NOVO_ENDERECO
-              DELETE;PESSOA;CPF
-              LIST;PESSOA
-            
-            PROFESSORES:
-              INSERT;PROFESSOR;CPF;NOME;ENDERECO;ESPECIALIZACAO
-              GET;PROFESSOR;CPF
-              DELETE;PROFESSOR;CPF
-              LIST;PROFESSOR
-            
-            ALUNOS:
-              INSERT;ALUNO;CPF;NOME;ENDERECO;MATRICULA
-              GET;ALUNO;CPF
-              DELETE;ALUNO;CPF
-              LIST;ALUNO
-            
-            AULAS:
-              INSERT;AULA;DATA(dd/MM/yyyy HH:mm);VALOR;CPF_PROFESSOR;CPF_ALUNO;LOCAL
-              GET;AULA;DATA;CPF_PROFESSOR
-              DELETE;AULA;DATA;CPF_PROFESSOR
-              LIST;AULA
-            
-            Digite SAIR para encerrar
-            ============================
-            """);
+        System.out.println(Mensagens.SINTAXE);
 
         try (Socket socket = new Socket("127.0.0.1", 80);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            
+
+            int count = 0;
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+
             while (true) {
-                System.out.print("\n> ");
-                String comando = scanner.nextLine();
-                
-                if (comando.equalsIgnoreCase("SAIR")) break;
-                
-                out.println(comando);
-                String resposta = in.readLine();
-                
-                if (resposta.startsWith("OK;")) {
-                    System.out.println("Sucesso: " + resposta.substring(3));
-                } else if (resposta.startsWith("ERRO;")) {
-                    System.err.println("Erro: " + resposta.substring(5));
-                } else {
+                if (count < 3) {
+                    System.out.print("\n> ");
+
+                    Future<String> future = executor.submit(() -> scanner.nextLine());
+
+                    String comando;
+                    try {
+                        comando = future.get(5, TimeUnit.SECONDS);
+                    } catch (TimeoutException e) {
+                        System.out.println(Mensagens.TIMEOUT);
+                        out.println("TIMEOUT");
+                        break;
+                    }
+
+                    if (comando.equalsIgnoreCase("SAIR")) {
+                        System.out.print(Mensagens.CONEXAO_CLIENTE_CLOSE);
+                        out.println(comando);
+                        break;
+                    }
+
+                    out.println(comando);
+                    String resposta = in.readLine();
                     System.out.println("Resposta: " + resposta);
+
+                    if (resposta.equalsIgnoreCase(Mensagens.OPCAO_INVALIDA)) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    out.println("INVALIDO");
+                    break;
                 }
             }
-        } catch (IOException e) {
+            executor.shutdown();
+        } catch (IOException | InterruptedException | ExecutionException e) {
             System.err.println("Erro no cliente: " + e.getMessage());
         } finally {
             scanner.close();

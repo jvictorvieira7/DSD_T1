@@ -26,7 +26,7 @@ public class Aluno extends Pessoa {
             return "Erro: Aluno com este CPF já existe";
         }
         alunos.add(a);
-        Pessoa.Insert(a); // Também insere como Pessoa
+//        Pessoa.Insert(a); // Também insere como Pessoa
         return "Aluno inserido com sucesso";
     }
 

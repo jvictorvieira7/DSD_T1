@@ -48,7 +48,7 @@ public class PessoaController {
         Pessoa tryGet = pessoaService.getDB(cpf);
 
         if (tryGet != null) {
-            return Mensagens.BUSCA_EXECUTADA + tryGet.getCpf() + tryGet.getNome();
+            return Mensagens.BUSCA_EXECUTADA + "CPF: " + tryGet.getCpf() + " Nome: " + tryGet.getNome() + " Endereco: " + tryGet.getEndereco();
         }
         return Mensagens.PESSOA_NAO_ENCONTRADA;
     }
@@ -57,7 +57,7 @@ public class PessoaController {
         boolean tryDelete = pessoaService.deleteDB(cpf);
 
         if (tryDelete) {
-            return Mensagens.PESSOA_DELETADA + cpf;
+            return Mensagens.PESSOA_DELETADA + "CPF: " + cpf;
         } else {
             return Mensagens.PESSOA_NAO_ENCONTRADA;
         }
@@ -67,11 +67,12 @@ public class PessoaController {
         List<Pessoa> tryList = pessoaService.listDB();
 
         if (tryList != null) {
-
-            StringBuilder lista = new StringBuilder(Mensagens.LISTAR_PESSOAS + "\n");
+            StringBuilder lista = new StringBuilder(Mensagens.LISTAR_PESSOAS + " ");
             for (Pessoa p : tryList) {
-                lista.append(String.format("CPF: %s, Nome: %s, Endereço: %s%n", p.getCpf(), p.getNome(), p.getEndereco()));
+                lista.append(String.format("[ CPF: %s, Nome: %s ]", p.getCpf(), p.getNome()));
+                lista.append(String.format(", "));
             }
+            lista.deleteCharAt(lista.length() - 2);
             return lista.toString();
         }
         return Mensagens.LISTA_VAZIA;
