@@ -13,5 +13,7 @@ public class Mensagens {
     public static final String PESSOA_INSERIDA_SUCESSO = "Pessoa inserida com sucesso.";
 
     public static final String BUSCA_EXECUTADA = "Pessoa encontrada: ";
+    
+    public static final String PESSOA_REMOVIDA_SUCESSO = "Pessoa removida com sucesso.";
 
 }

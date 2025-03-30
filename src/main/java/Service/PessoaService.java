@@ -41,24 +41,19 @@ public class PessoaService {
     }
 
 
-    public boolean getDB(String cpf) {
-        Pessoa pessoaCadastrada = buscarPorCpf(cpf);
-        if (pessoaCadastrada == null) {
-            return UpdateCase.PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
-        }
-        return true;
+    public Pessoa getDB(String cpf) {
+        return buscarPorCpf(cpf);
     }
 
-    public static String Delete(String cpf) {
-        Pessoa pessoa = buscarPorCpf(cpf);
-        if (pessoa == null) {
-            return "Erro: Pessoa não encontrada";
+    public boolean DeleteDB(Pessoa p) {
+    	if (buscarPorCpf(p.getCpf()) == null) {
+            return false; //CPF nao encontrado
         }
-        pessoas.remove(pessoa);
-        return "Pessoa removida com sucesso";
+        pessoas.remove(p);
+        return true; //Retorna true se a pessoa for removida com sucesso
     }
 
-    public static List<Pessoa> list() {
+    public static List<Pessoa> listDB() {
         return new ArrayList<>(pessoas);
     }
 

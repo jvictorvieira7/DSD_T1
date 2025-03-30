@@ -46,25 +46,26 @@ public class PessoaController {
 
 
     public String Get(String cpf) {
-     boolean tryGet = pessoaService.getDB(cpf);
+     Pessoa pessoa = pessoaService.getDB(cpf);
 
-     if (tryGet) {
-         return Mensagens.BUSCA_EXECUTADA + pe
+     if (pessoa != null) {
+         return Mensagens.BUSCA_EXECUTADA + pessoa.toString();
      }
-        return buscarPorCpf(cpf);
+        return Mensagens.PESSOA_NAO_ENCONTRADA;
     }
 
-    public static String Delete(String cpf) {
-        Pessoa pessoa = buscarPorCpf(cpf);
-        if (pessoa == null) {
-            return "Erro: Pessoa não encontrada";
+    public String Delete(Pessoa p) {
+    	boolean tryDelete = pessoaService.DeleteDB(p);
+
+        if (tryDelete) {
+            return Mensagens.PESSOA_REMOVIDA_SUCESSO;
+        } else {
+            return Mensagens.PESSOA_NAO_ENCONTRADA;
         }
-        pessoas.remove(pessoa);
-        return "Pessoa removida com sucesso";
     }
 
-    public static List<Pessoa> List() {
-        return new ArrayList<>(pessoas);
+    public List<Pessoa> List() {
+        return pessoaService.listDB();
     }
 
 
