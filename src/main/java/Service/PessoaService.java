@@ -7,22 +7,22 @@ import java.util.List;
 
 public class PessoaService {
 
-    private static List<Pessoa> pessoas = new ArrayList<>();
+    private static List<Pessoa> pessoaList = new ArrayList<>();
 
 
     public boolean insertDB(Pessoa p) {
         if (buscarPorCpf(p.getCpf()) != null) {
             return false; //CPF já cadastrado
         }
-        pessoas.add(p);
+        pessoaList.add(p);
         return true; //Retorna true se a pessoa for adicionada com sucesso
     }
 
-    public UpdateCase updateDB(Pessoa p, int opt) {
+    public OptCase updateDB(Pessoa p, int opt) {
         //Verifica se a pessoa já existe pelo CPF
         Pessoa pessoaCadastrada = buscarPorCpf(p.getCpf());
         if (pessoaCadastrada == null) {
-            return UpdateCase.PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
+            return OptCase.CASE_PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
         }
 
         //Realiza a atualização com base na opção 'opt'
@@ -34,36 +34,38 @@ public class PessoaService {
                 pessoaCadastrada.setEndereco(p.getEndereco());
                 break;
             default:
-                return UpdateCase.OPCAO_INVALIDA;  // Opção inválida
+                return OptCase.CASE_OPCAO_INVALIDA;  // Opção inválida
         }
-
-        return UpdateCase.SUCESSO;  //Atualização bem-sucedida
+        return OptCase.CASE_SUCESSO;  //Atualização bem-sucedida
     }
 
 
-    public boolean getDB(String cpf) {
+    public Pessoa getDB(String cpf) {
         Pessoa pessoaCadastrada = buscarPorCpf(cpf);
         if (pessoaCadastrada == null) {
-            return UpdateCase.PESSOA_NAO_ENCONTRADA;  //Pessoa não encontrada
+            return null;  //Pessoa não encontrada
         }
+        return pessoaCadastrada;
+    }
+
+    public boolean deleteDB(String cpf) {
+        Pessoa pessoaCadastrada = buscarPorCpf(cpf);
+        if (pessoaCadastrada == null) {
+            return false;
+        }
+        pessoaList.remove(pessoaCadastrada);
         return true;
     }
 
-    public static String Delete(String cpf) {
-        Pessoa pessoa = buscarPorCpf(cpf);
-        if (pessoa == null) {
-            return "Erro: Pessoa não encontrada";
+    public List<Pessoa> listDB() {
+        if (pessoaList.isEmpty()) {
+            return null;
         }
-        pessoas.remove(pessoa);
-        return "Pessoa removida com sucesso";
-    }
-
-    public static List<Pessoa> list() {
-        return new ArrayList<>(pessoas);
+        return new ArrayList<>(pessoaList);
     }
 
     private Pessoa buscarPorCpf(String cpf) {
-        for (Pessoa p : pessoas) {
+        for (Pessoa p : pessoaList) {
             if (p.getCpf().equals(cpf)) {
                 return p;
             }

@@ -14,4 +14,9 @@ public class Mensagens {
 
     public static final String BUSCA_EXECUTADA = "Pessoa encontrada: ";
 
+    public static final String PESSOA_DELETADA = "Pessoa deletada: ";
+
+    public static final String LISTAR_PESSOAS = "Lisa de pessoas cadastradas: ";
+
+    public static final String LISTA_VAZIA = "Nenhuma pessoa cadastrada no sistema";
 }
