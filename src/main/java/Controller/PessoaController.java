@@ -3,19 +3,19 @@ package Controller;
 import Model.Pessoa;
 import Service.Mensagens;
 import Service.PessoaService;
-import Service.UpdateCase;
+import Service.OptCase;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PessoaController {
 
- private final PessoaService pessoaService;
+    private final PessoaService pessoaService;
 
 
- public PessoaController(PessoaService pessoaService) {
-     this.pessoaService = pessoaService;
- }
+    public PessoaController(PessoaService pessoaService) {
+        this.pessoaService = pessoaService;
+    }
 
 
     public String insertPessoa(Pessoa p) {
@@ -29,14 +29,14 @@ public class PessoaController {
     }
 
     public String updatePessoa(Pessoa p, int opt) {
-        UpdateCase tryUpdate = pessoaService.updateDB(p, opt);
+        OptCase tryUpdate = pessoaService.updateDB(p, opt);
 
         switch (tryUpdate) {
-            case SUCESSO:
+            case CASE_SUCESSO:
                 return Mensagens.PESSOA_ATUALIZADA_SUCESSO;
-            case PESSOA_NAO_ENCONTRADA:
+            case CASE_PESSOA_NAO_ENCONTRADA:
                 return Mensagens.PESSOA_NAO_ENCONTRADA;
-            case OPCAO_INVALIDA:
+            case CASE_OPCAO_INVALIDA:
                 return Mensagens.OPCAO_INVALIDA;
             default:
                 return "Erro desconhecido";
@@ -44,28 +44,37 @@ public class PessoaController {
     }
 
 
+    public String get(String cpf) {
+        Pessoa tryGet = pessoaService.getDB(cpf);
 
-    public String Get(String cpf) {
-     Pessoa pessoa = pessoaService.getDB(cpf);
-
-     if (pessoa != null) {
-         return Mensagens.BUSCA_EXECUTADA + pessoa.toString();
-     }
+        if (tryGet != null) {
+            return Mensagens.BUSCA_EXECUTADA + tryGet.getCpf() + tryGet.getNome();
+        }
         return Mensagens.PESSOA_NAO_ENCONTRADA;
     }
 
-    public String Delete(Pessoa p) {
-    	boolean tryDelete = pessoaService.DeleteDB(p);
+    public String delete(String cpf) {
+        boolean tryDelete = pessoaService.deleteDB(cpf);
 
         if (tryDelete) {
-            return Mensagens.PESSOA_REMOVIDA_SUCESSO;
+            return Mensagens.PESSOA_DELETADA + cpf;
         } else {
             return Mensagens.PESSOA_NAO_ENCONTRADA;
         }
     }
 
-    public List<Pessoa> List() {
-        return pessoaService.listDB();
+    public String list() {
+        List<Pessoa> tryList = pessoaService.listDB();
+
+        if (tryList != null) {
+
+            StringBuilder lista = new StringBuilder(Mensagens.LISTAR_PESSOAS + "\n");
+            for (Pessoa p : tryList) {
+                lista.append(String.format("CPF: %s, Nome: %s, Endereço: %s%n", p.getCpf(), p.getNome(), p.getEndereco()));
+            }
+            return lista.toString();
+        }
+        return Mensagens.LISTA_VAZIA;
     }
 
 
