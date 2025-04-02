@@ -25,6 +25,20 @@ public class Mensagens {
     public static final String CONEXAO_CLIENTE_CLOSE = "Conexão com o servidor encerrada.";
 
     public static final String SERVER_STARTED = "Servidor iniciado na porta: ";
+    
+    public static final String AULA_AGENDADA_SUCESSO = "Aula agendada com sucesso";
+    
+    public static final String PROFESSOR_HORARIO_OCUPADO = "Erro: Professor já tem aula neste horário";
+    
+    public static final String AULA_NAO_ENCONTRADA = "Aula não encontrada";
+    
+    public static final String AULA_CANCELADA_SUCESSO = "Aula cancelada com sucesso";
+    
+    public static final String LISTA_AULAS_VAZIA = "Nenhuma aula agendada";
+    
+    public static final String BUSCA_AULA_EXECUTADA = "Aula encontrada: ";
+    
+    public static final String LISTAR_AULAS = "Aulas agendadas: ";
 
     public static final String SINTAXE = """
             ===== SINTAXE DE COMANDOS =====
@@ -58,5 +72,6 @@ public class Mensagens {
             Digite SAIR para encerrar
             ============================
             """;
+
 
 }

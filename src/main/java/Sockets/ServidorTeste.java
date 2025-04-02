@@ -1,18 +1,21 @@
 package Sockets;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
+import Controller.AulaParticularController;
 import Controller.PessoaController;
-import Model.Aluno;
 import Model.AulaParticular;
 import Model.Pessoa;
-import Model.Professor;
+import Service.AulaParticularService;
 import Service.Mensagens;
 import Service.PessoaService;
 
@@ -87,6 +90,9 @@ public class ServidorTeste {
         }
     }
 
+    private static PessoaService pessoaService = new PessoaService();
+    private static AulaParticularService aulaService = new AulaParticularService(pessoaService);
+    private static AulaParticularController aulaController = new AulaParticularController(aulaService);
 
     private static String handleInsert(String opt, String[] partes) {
 
@@ -107,6 +113,18 @@ public class ServidorTeste {
 //                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
 //                AulaParticular aula = new AulaParticular(data, Double.parseDouble(partes[3]), partes[6], pAula, aAula);
 //                return AulaParticular.Insert(aula);
+            case "AULA":
+                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
+                AulaParticular aula = new AulaParticular(
+                    data,
+                    Double.parseDouble(partes[3]),
+                    partes[6], // local
+                    partes[4], // cpfProfessor
+                    partes[5]  // cpfAluno
+                );
+               // AulaParticularService aulaService = new AulaParticularService(new PessoaService()); 
+                //AulaParticularController aulaController = new AulaParticularController(aulaService);
+                return aulaController.agendarAula(aula);
             default:
                 return Mensagens.OPCAO_INVALIDA;
         }
@@ -142,6 +160,11 @@ public class ServidorTeste {
 //                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
 //                AulaParticular aula = AulaParticular.Get(data, partes[3]);
 //                return aula != null ? formatAula(aula) : "ERRO;Aula não encontrada";
+            case "AULA":
+                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
+               // AulaParticularService aulaService = new AulaParticularService(new PessoaService()); 
+               // AulaParticularController aulaController = new AulaParticularController(aulaService);
+                return aulaController.buscarAula(data, partes[3]); 
             default:
                 return Mensagens.OPCAO_INVALIDA;
         }
@@ -159,6 +182,11 @@ public class ServidorTeste {
 //            case "AULA":
 //                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
 //                return AulaParticular.Delete(data, partes[3]);
+            case "AULA":
+                LocalDateTime data = LocalDateTime.parse(partes[2], formatter);
+               // AulaParticularService aulaService = new AulaParticularService(new PessoaService()); 
+               // AulaParticularController aulaController = new AulaParticularController(aulaService);
+                return aulaController.cancelarAula(data, partes[3]); 
             default:
                 return Mensagens.OPCAO_INVALIDA;
         }
@@ -176,13 +204,17 @@ public class ServidorTeste {
 //                return formatList(Aluno.List());
 //            case "AULA":
 //                return formatAulaList(AulaParticular.List());
+            case "AULA":
+            //	AulaParticularService aulaService = new AulaParticularService(new PessoaService()); 
+           //   AulaParticularController aulaController = new AulaParticularController(aulaService);
+                return aulaController.listarAulas(); 
             default:
                 return Mensagens.OPCAO_INVALIDA;
         }
     }
 
 
-    private static String formatAula(AulaParticular aula) {
+  /*  private static String formatAula(AulaParticular aula) {
         return String.format("OK;%s;%.2f;%s;%s;%s;%s",
                 aula.getDataHora().format(formatter),
                 aula.getValor(),
@@ -201,5 +233,5 @@ public class ServidorTeste {
               .append(a.getAluno().getCpf()).append("|");
         }
         return sb.length() > 3 ? sb.substring(0, sb.length()-1) : "OK;Nenhuma aula";
-    }
+    }*/
 }

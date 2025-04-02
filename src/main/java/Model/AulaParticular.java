@@ -8,17 +8,19 @@ public class AulaParticular {
     private LocalDateTime dataHora;
     private double valor;
     private String local;
-    private Professor professor;
-    private Aluno aluno;
+    private String cpfProfessor;
+    private String cpfAluno;
+  //  private Professor professor;
+  // private Aluno aluno;
     private static List<AulaParticular> aulas = new ArrayList<>();
 
     public AulaParticular(LocalDateTime dataHora, double valor, String local, 
-                         Professor professor, Aluno aluno) {
+                         String cpfProfessor, String cpfAluno) {
         this.dataHora = dataHora;
         this.valor = valor;
         this.local = local;
-        this.professor = professor;
-        this.aluno = aluno;
+        this.cpfProfessor = cpfProfessor;
+        this.cpfAluno = cpfAluno; 
     }
 
     public LocalDateTime getDataHora() {
@@ -33,6 +35,25 @@ public class AulaParticular {
         return local;
     }
 
+	public String getCpfProfessor() {
+		return cpfProfessor;
+	}
+
+	public void setCpfProfessor(String cpfProfessor) {
+		this.cpfProfessor = cpfProfessor;
+	}
+
+	public String getCpfAluno() {
+		return cpfAluno;
+	}
+
+	public void setCpfAluno(String cpfAluno) {
+		this.cpfAluno = cpfAluno;
+	}
+    
+    
+
+    /*
     public Professor getProfessor() {
         return professor;
     }
@@ -40,6 +61,7 @@ public class AulaParticular {
     public Aluno getAluno() {
         return aluno;
     }
+    
 
     // CRUD
     public static String Insert(AulaParticular aula) {
@@ -81,4 +103,5 @@ public class AulaParticular {
         }
         return false;
     }
+    */
 }
