@@ -5,7 +5,6 @@ import Service.Mensagens;
 import Service.PessoaService;
 import Service.OptCase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PessoaController {
@@ -27,6 +26,7 @@ public class PessoaController {
             return Mensagens.PESSOA_JA_EXISTE;
         }
     }
+
 
     public String updatePessoa(Pessoa p, int opt) {
         OptCase tryUpdate = pessoaService.updateDB(p, opt);
@@ -53,6 +53,7 @@ public class PessoaController {
         return Mensagens.PESSOA_NAO_ENCONTRADA;
     }
 
+
     public String delete(String cpf) {
         boolean tryDelete = pessoaService.deleteDB(cpf);
 
@@ -63,11 +64,12 @@ public class PessoaController {
         }
     }
 
+
     public String list() {
         List<Pessoa> tryList = pessoaService.listDB();
 
         if (tryList != null) {
-            StringBuilder lista = new StringBuilder(Mensagens.LISTAR_PESSOAS + " ");
+            StringBuilder lista = new StringBuilder(Mensagens.LISTAR_PESSOAS + tryList.size() + " | Lista: ");
             for (Pessoa p : tryList) {
                 lista.append(String.format("[ CPF: %s, Nome: %s ]", p.getCpf(), p.getNome()));
                 lista.append(String.format(", "));
@@ -78,5 +80,9 @@ public class PessoaController {
         return Mensagens.LISTA_VAZIA;
     }
 
+    public Pessoa buscaPorCPF(String cpf) {
+        Pessoa pessoaCadastrada = pessoaService.getDB(cpf);
+        return pessoaCadastrada;
+    }
 
 }

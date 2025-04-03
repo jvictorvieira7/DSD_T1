@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.AulaParticular;
+import Model.Pessoa;
 
 public class AulaParticularService {
-	  private final PessoaService pessoaService; 
+	  private final PessoaService pessoaService;
+
 	    private static List<AulaParticular> aulas = new ArrayList<>();
+
 
 	    public AulaParticularService(PessoaService pessoaService) {
 	        this.pessoaService = pessoaService;
@@ -52,6 +55,16 @@ public class AulaParticularService {
         aulas.remove(aula);
         return Mensagens.AULA_CANCELADA_SUCESSO;
     }
+
+    public boolean removerAulasPorPessoa(Pessoa pessoa) {
+        if (pessoa == null) {
+            return false;
+        } else {
+            aulas.removeIf(aula -> aula.getCpfAluno().equals(pessoa.getCpf()) || aula.getCpfProfessor().equals(pessoa.getCpf()));
+            return true;
+        }
+    }
+
 
     public List<AulaParticular> list() {
         if (aulas.isEmpty()) {

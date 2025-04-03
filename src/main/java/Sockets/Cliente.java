@@ -1,38 +1,65 @@
 package Sockets;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import Service.Mensagens;
+
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+import java.util.concurrent.*;
 
 public class Cliente {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println(Mensagens.SINTAXE);
 
-    public static void main(String[] args) throws IOException {
+        try (Socket socket = new Socket("127.0.0.1", 80);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-        System.out.println("Criando conexão...");
+            int count = 0;
+            ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        try (Socket socket = new Socket("192.168.0.103", 80);) {
-            System.out.println("Conectado com sucesso!");
-            InputStream inputStream = socket.getInputStream();
-            byte[] dadosBrutos = new byte[1024];
-            int qtdBytesLidos = inputStream.read(dadosBrutos);
-            while (qtdBytesLidos >= 0) {
-                String dadosStream = new String(dadosBrutos, 0, qtdBytesLidos);
-                System.out.println(dadosStream);
-                qtdBytesLidos = inputStream.read(dadosBrutos);
+            while (true) {
+                if (count < 3) {
+                    System.out.print("\n> ");
+
+                    Future<String> future = executor.submit(() -> scanner.nextLine());
+
+                    String comando;
+                    try {
+                        comando = future.get(50000, TimeUnit.SECONDS);
+                    } catch (TimeoutException e) {
+                        System.out.println(Mensagens.TIMEOUT);
+                        out.println("TIMEOUT");
+                        break;
+                    }
+
+                    if (comando.equalsIgnoreCase("SAIR")) {
+                        System.out.print(Mensagens.CONEXAO_CLIENTE_CLOSE);
+                        out.println(comando);
+                        break;
+                    }
+
+                    out.println(comando);
+                    String resposta = in.readLine();
+                    System.out.println("Resposta: " + resposta);
+
+                    if (resposta.equalsIgnoreCase(Mensagens.OPCAO_INVALIDA)) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                } else {
+                    out.println("INVALIDO");
+                    break;
+                }
             }
-
-        } catch (UnknownHostException e) {
-            System.out.println("Host não encontrado!");
-            e.printStackTrace();
+            executor.shutdown();
+        } catch (IOException | InterruptedException | ExecutionException e) {
+            System.err.println("Erro no cliente: " + e.getMessage());
+        } finally {
+            scanner.close();
         }
     }
-
-
-
-
-    //TODO Disponibiliza switch no terminal ao cliente: INSERT, UPDATE, GET, DELETE, LIST.
-
-
-
 }
