@@ -10,10 +10,12 @@ import java.util.concurrent.*;
 public class Cliente {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("Digite o IP do servidor: ");
+        String IP = scanner.nextLine();
         
         System.out.println(Mensagens.SINTAXE);
 
-        try (Socket socket = new Socket("127.0.0.1", 80);
+        try (Socket socket = new Socket(IP, 80);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
